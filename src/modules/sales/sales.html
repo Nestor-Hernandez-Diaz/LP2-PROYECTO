@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas - LP2 Minimarket</title>
+    
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="../../../public/assets/css/styles.css">
+    <!-- Module CSS -->
+    <link rel="stylesheet" href="sales.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="sales-container">
+        <!-- Header -->
+        <div class="module-header">
+            <div class="header-content">
+                <div class="header-info">
+                    <h1 class="module-title">
+                        <i class="fas fa-shopping-cart"></i>
+                        Gestión de Ventas
+                    </h1>
+                    <p class="module-subtitle">Administra las ventas y facturación del minimarket</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="newSaleBtn">
+                        <i class="fas fa-plus"></i>
+                        Nueva Venta
+                    </button>
+                    <button class="btn btn-outline-secondary" id="exportBtn">
+                        <i class="fas fa-download"></i>
+                        Exportar
+                    </button>
+                    <button class="btn btn-outline-secondary" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i>
+                        Actualizar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters and Search -->
+        <div class="filters-section">
+            <div class="filters-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por número, cliente, producto...">
+                </div>
+                
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label for="statusFilter">Estado:</label>
+                        <select id="statusFilter">
+                            <option value="">Todos los estados</option>
+                            <option value="pending">Pendiente</option>
+                            <option value="completed">Completada</option>
+                            <option value="cancelled">Cancelada</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="clientFilter">Cliente:</label>
+                        <select id="clientFilter">
+                            <option value="">Todos los clientes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="paymentMethodFilter">Método de Pago:</label>
+                        <select id="paymentMethodFilter">
+                            <option value="">Todos los métodos</option>
+                            <option value="cash">Efectivo</option>
+                            <option value="card">Tarjeta</option>
+                            <option value="transfer">Transferencia</option>
+                            <option value="mixed">Mixto</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="dateFromFilter">Desde:</label>
+                        <input type="date" id="dateFromFilter">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="dateToFilter">Hasta:</label>
+                        <input type="date" id="dateToFilter">
+                    </div>
+                    
+                    <button class="btn btn-outline-secondary" id="clearFiltersBtn">
+                        <i class="fas fa-times"></i>
+                        Limpiar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Statistics -->
+        <div class="stats-section">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalSales">0</div>
+                        <div class="stat-label">Total Ventas</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalRevenue">S/ 0.00</div>
+                        <div class="stat-label">Ingresos Totales</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="todaySales">0</div>
+                        <div class="stat-label">Ventas Hoy</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="averageTicket">S/ 0.00</div>
+                        <div class="stat-label">Ticket Promedio</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales Table -->
+        <div class="sales-section">
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="table-title">
+                        <h3>Lista de Ventas</h3>
+                    </div>
+                    <div class="table-actions">
+                        <div class="table-controls">
+                            <label for="itemsPerPageSelect">Mostrar:</label>
+                            <select id="itemsPerPageSelect">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span>de <span id="totalItems">0</span> registros</span>
+                        </div>
+                        <div class="bulk-actions">
+                            <input type="checkbox" id="selectAllCheckbox">
+                            <label for="selectAllCheckbox">Seleccionar todo</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-wrapper">
+                    <table class="sales-table" id="salesTable">
+                        <thead>
+                            <tr>
+                                <th width="40">
+                                    <input type="checkbox" id="selectAllHeader">
+                                </th>
+                                <th class="sortable" data-field="saleNumber">
+                                    Número <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" data-field="date">
+                                    Fecha <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" data-field="client">
+                                    Cliente <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" data-field="items">
+                                    Productos <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" data-field="total">
+                                    Total <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" data-field="paymentMethod">
+                                    Método Pago <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" data-field="status">
+                                    Estado <i class="fas fa-sort"></i>
+                                </th>
+                                <th width="120">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesTableBody">
+                            <!-- Sales will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Mostrando <span id="startItem">0</span> a <span id="endItem">0</span> de <span id="totalItemsPagination">0</span> registros
+                    </div>
+                    <div class="pagination-controls" id="paginationContainer">
+                        <!-- Pagination buttons will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <p>Cargando...</p>
+    </div>
+
+    <!-- New/Edit Sale Modal -->
+    <div class="modal" id="saleModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 class="modal-title">Nueva Venta</h2>
+                <button class="close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="saleForm">
+                    <input type="hidden" id="saleId" name="id">
+                    
+                    <!-- Sale Info -->
+                    <div class="form-section">
+                        <h3>Información General</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="saleNumber">Número de Venta:</label>
+                                <input type="text" id="saleNumber" name="saleNumber" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="saleDate">Fecha:</label>
+                                <input type="date" id="saleDate" name="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="saleTime">Hora:</label>
+                                <input type="time" id="saleTime" name="time" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Client Info -->
+                    <div class="form-section">
+                        <h3>Cliente</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="clientType">Tipo de Cliente:</label>
+                                <select id="clientType" name="clientType" required>
+                                    <option value="">Seleccionar tipo</option>
+                                    <option value="regular">Cliente Regular</option>
+                                    <option value="occasional">Cliente Ocasional</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="clientSelectGroup">
+                                <label for="clientSelect">Cliente:</label>
+                                <select id="clientSelect" name="clientId">
+                                    <option value="">Seleccionar cliente</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="clientNameGroup" style="display: none;">
+                                <label for="clientName">Nombre del Cliente:</label>
+                                <input type="text" id="clientName" name="clientName" placeholder="Nombre del cliente ocasional">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products Section -->
+                    <div class="form-section">
+                        <h3>Productos</h3>
+                        <div class="products-header">
+                            <button type="button" class="btn btn-outline-primary" id="addProductBtn">
+                                <i class="fas fa-plus"></i>
+                                Agregar Producto
+                            </button>
+                        </div>
+                        <div class="products-table-container">
+                            <table class="products-table">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th width="100">Cantidad</th>
+                                        <th width="120">Precio Unit.</th>
+                                        <th width="80">Desc. %</th>
+                                        <th width="120">Subtotal</th>
+                                        <th width="60">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="saleProductsTableBody">
+                                    <!-- Products will be added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Payment Section -->
+                    <div class="form-section">
+                        <h3>Pago</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="paymentMethod">Método de Pago:</label>
+                                <select id="paymentMethod" name="paymentMethod" required>
+                                    <option value="">Seleccionar método</option>
+                                    <option value="cash">Efectivo</option>
+                                    <option value="card">Tarjeta</option>
+                                    <option value="transfer">Transferencia</option>
+                                    <option value="mixed">Mixto</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="amountReceivedGroup">
+                                <label for="amountReceived">Monto Recibido:</label>
+                                <input type="number" id="amountReceived" name="amountReceived" step="0.01" min="0">
+                            </div>
+                            <div class="form-group" id="changeAmountGroup">
+                                <label for="changeAmount">Vuelto:</label>
+                                <input type="number" id="changeAmount" name="changeAmount" step="0.01" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Totals -->
+                    <div class="form-section">
+                        <div class="totals-container">
+                            <div class="totals-row">
+                                <span class="totals-label">Subtotal:</span>
+                                <span class="totals-value" id="saleSubtotal">S/ 0.00</span>
+                            </div>
+                            <div class="totals-row">
+                                <span class="totals-label">Descuento:</span>
+                                <span class="totals-value" id="saleDiscount">S/ 0.00</span>
+                            </div>
+                            <div class="totals-row">
+                                <span class="totals-label">IGV (18%):</span>
+                                <span class="totals-value" id="saleIgv">S/ 0.00</span>
+                            </div>
+                            <div class="totals-row total">
+                                <span class="totals-label">Total:</span>
+                                <span class="totals-value" id="saleTotal">S/ 0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="saleNotes">Notas:</label>
+                            <textarea id="saleNotes" name="notes" rows="3" placeholder="Notas adicionales sobre la venta"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" form="saleForm" class="btn btn-primary">Guardar Venta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Selection Modal -->
+    <div class="modal" id="productSelectionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Seleccionar Producto</h2>
+                <button class="close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="product-search">
+                    <input type="text" id="productSearchInput" placeholder="Buscar producto por nombre, código o código de barras...">
+                </div>
+                <div class="product-list" id="productSelectionList">
+                    <!-- Products will be populated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Sale Modal -->
+    <div class="modal" id="viewSaleModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 class="modal-title">Detalle de Venta</h2>
+                <button class="close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="sale-preview" id="salePreviewContent">
+                    <!-- Sale details will be populated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-outline-primary" id="printSaleBtn">
+                    <i class="fas fa-print"></i>
+                    Imprimir
+                </button>
+                <button type="button" class="btn btn-outline-primary" id="emailSaleBtn">
+                    <i class="fas fa-envelope"></i>
+                    Enviar por Email
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global JavaScript -->
+    <script src="../../utils/config.js"></script>
+    <script src="../../utils/helpers.js"></script>
+    <script src="../../services/api.service.js"></script>
+    
+    <!-- Module JavaScript -->
+    <script src="sales.js"></script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizaciones - Minimarket Sales System</title>
+    
+    <!-- CSS Global -->
+    <link rel="stylesheet" href="../../../public/assets/css/styles.css">
+    <!-- CSS del Módulo -->
+    <link rel="stylesheet" href="quotes.css">
+</head>
+<body>
+    <div class="quotes-container">
+        <!-- Header del módulo -->
+        <div class="quotes-header">
+            <div class="header-content">
+                <h1 class="module-title">Cotizaciones</h1>
+                <p class="module-subtitle">Gestión de cotizaciones y presupuestos</p>
+            </div>
+            <div class="header-actions">
+                <button id="exportQuotesBtn" class="btn btn-secondary">
+                    📊 Exportar
+                </button>
+                <button id="newQuoteBtn" class="btn btn-primary">
+                    ➕ Nueva Cotización
+                </button>
+            </div>
+        </div>
+
+        <!-- Filtros y búsqueda -->
+        <div class="quotes-filters">
+            <div class="filters-row">
+                <div class="search-box">
+                    <input type="text" id="quoteSearch" placeholder="Buscar por número, cliente o producto...">
+                    <button id="searchBtn" class="search-btn">🔍</button>
+                </div>
+                
+                <div class="filter-group">
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">Todos los estados</option>
+                        <option value="draft">Borrador</option>
+                        <option value="sent">Enviada</option>
+                        <option value="approved">Aprobada</option>
+                        <option value="rejected">Rechazada</option>
+                        <option value="expired">Vencida</option>
+                    </select>
+                    
+                    <select id="dateFilter" class="filter-select">
+                        <option value="">Todas las fechas</option>
+                        <option value="today">Hoy</option>
+                        <option value="week">Esta semana</option>
+                        <option value="month">Este mes</option>
+                        <option value="quarter">Este trimestre</option>
+                    </select>
+                    
+                    <input type="date" id="dateFromFilter" class="filter-input">
+                    <input type="date" id="dateToFilter" class="filter-input">
+                    
+                    <button id="clearFiltersBtn" class="btn btn-outline">
+                        🗑️ Limpiar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas rápidas -->
+        <div class="quotes-stats">
+            <div class="stat-card">
+                <div class="stat-icon">📋</div>
+                <div class="stat-content">
+                    <h3 id="totalQuotes">0</h3>
+                    <p>Total Cotizaciones</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-content">
+                    <h3 id="totalValue">S/ 0.00</h3>
+                    <p>Valor Total</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-content">
+                    <h3 id="approvedQuotes">0</h3>
+                    <p>Aprobadas</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">⏳</div>
+                <div class="stat-content">
+                    <h3 id="pendingQuotes">0</h3>
+                    <p>Pendientes</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de cotizaciones -->
+        <div class="quotes-table-container">
+            <div class="table-header">
+                <h2>Lista de Cotizaciones</h2>
+                <div class="table-actions">
+                    <button id="refreshTableBtn" class="btn btn-outline">
+                        🔄 Actualizar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-wrapper">
+                <table class="quotes-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="selectAllQuotes">
+                            </th>
+                            <th class="sortable" data-sort="number">
+                                Número <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="client">
+                                Cliente <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="date">
+                                Fecha <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="validUntil">
+                                Válida Hasta <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="total">
+                                Total <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="status">
+                                Estado <span class="sort-icon">↕️</span>
+                            </th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="quotesTableBody">
+                        <!-- Las cotizaciones se cargarán aquí dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Paginación -->
+        <div class="pagination-container">
+            <div class="pagination-info">
+                <span id="paginationInfo">Mostrando 0-0 de 0 cotizaciones</span>
+            </div>
+            
+            <div class="pagination-controls">
+                <button id="firstPageBtn" class="pagination-btn">⏮️</button>
+                <button id="prevPageBtn" class="pagination-btn">⬅️</button>
+                
+                <div id="paginationNumbers" class="pagination-numbers">
+                    <!-- Los números se generarán dinámicamente -->
+                </div>
+                
+                <button id="nextPageBtn" class="pagination-btn">➡️</button>
+                <button id="lastPageBtn" class="pagination-btn">⏭️</button>
+            </div>
+            
+            <div class="pagination-size">
+                <label for="pageSizeSelect">Mostrar:</label>
+                <select id="pageSizeSelect">
+                    <option value="10">10</option>
+                    <option value="25" selected>25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <span>por página</span>
+            </div>
+        </div>
+
+        <!-- Loader -->
+        <div id="quotesLoader" class="loader hidden">
+            <div class="loader-spinner"></div>
+            <p>Cargando cotizaciones...</p>
+        </div>
+    </div>
+
+    <!-- Modal de Nueva/Editar Cotización -->
+    <div id="quoteModal" class="modal hidden">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="quoteModalTitle">Nueva Cotización</h2>
+                <button id="closeQuoteModalBtn" class="modal-close">✕</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="quoteForm" class="quote-form">
+                    <!-- Información general -->
+                    <div class="form-section">
+                        <h3>Información General</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="quoteNumber">Número de Cotización *</label>
+                                <input type="text" id="quoteNumber" name="number" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="quoteDate">Fecha *</label>
+                                <input type="date" id="quoteDate" name="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="quoteValidUntil">Válida Hasta *</label>
+                                <input type="date" id="quoteValidUntil" name="validUntil" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información del cliente -->
+                    <div class="form-section">
+                        <h3>Cliente</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="clientSearch">Buscar Cliente</label>
+                                <div class="client-search-container">
+                                    <input type="text" id="clientSearch" placeholder="Buscar por nombre, documento o teléfono...">
+                                    <button type="button" id="searchClientBtn" class="btn btn-outline">🔍</button>
+                                    <button type="button" id="newClientBtn" class="btn btn-outline">➕</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="clientName">Nombre/Razón Social *</label>
+                                <input type="text" id="clientName" name="clientName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="clientDocument">Documento</label>
+                                <input type="text" id="clientDocument" name="clientDocument">
+                            </div>
+                            <div class="form-group">
+                                <label for="clientPhone">Teléfono</label>
+                                <input type="tel" id="clientPhone" name="clientPhone">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="clientAddress">Dirección</label>
+                                <input type="text" id="clientAddress" name="clientAddress">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Productos -->
+                    <div class="form-section">
+                        <h3>Productos</h3>
+                        <div class="products-header">
+                            <button type="button" id="addProductBtn" class="btn btn-primary">
+                                ➕ Agregar Producto
+                            </button>
+                        </div>
+                        
+                        <div class="products-table-container">
+                            <table class="products-table">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio Unit.</th>
+                                        <th>Descuento</th>
+                                        <th>Subtotal</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="quoteProductsBody">
+                                    <!-- Los productos se agregarán dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Totales -->
+                    <div class="form-section">
+                        <div class="totals-container">
+                            <div class="totals-left">
+                                <div class="form-group">
+                                    <label for="quoteNotes">Observaciones</label>
+                                    <textarea id="quoteNotes" name="notes" rows="3" placeholder="Observaciones adicionales..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="totals-right">
+                                <div class="total-row">
+                                    <span>Subtotal:</span>
+                                    <span id="quoteSubtotal">S/ 0.00</span>
+                                </div>
+                                <div class="total-row">
+                                    <span>Descuento:</span>
+                                    <span id="quoteDiscount">S/ 0.00</span>
+                                </div>
+                                <div class="total-row">
+                                    <span>IGV (18%):</span>
+                                    <span id="quoteIgv">S/ 0.00</span>
+                                </div>
+                                <div class="total-row total">
+                                    <span>Total:</span>
+                                    <span id="quoteTotal">S/ 0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" id="cancelQuoteBtn" class="btn btn-secondary">
+                    Cancelar
+                </button>
+                <button type="button" id="saveQuoteBtn" class="btn btn-primary">
+                    Guardar Cotización
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Selección de Producto -->
+    <div id="productSelectionModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Seleccionar Producto</h2>
+                <button id="closeProductSelectionBtn" class="modal-close">✕</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="product-search">
+                    <input type="text" id="productSearchInput" placeholder="Buscar producto por nombre o código...">
+                </div>
+                
+                <div class="products-list" id="productsList">
+                    <!-- Los productos se cargarán dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Vista de Cotización -->
+    <div id="viewQuoteModal" class="modal hidden">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>Cotización <span id="viewQuoteNumber"></span></h2>
+                <div class="modal-actions">
+                    <button id="printQuoteBtn" class="btn btn-outline">🖨️ Imprimir</button>
+                    <button id="emailQuoteBtn" class="btn btn-outline">📧 Enviar</button>
+                    <button id="closeViewQuoteBtn" class="modal-close">✕</button>
+                </div>
+            </div>
+            
+            <div class="modal-body">
+                <div id="quotePreview" class="quote-preview">
+                    <!-- El contenido de la cotización se generará aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../utils/config.js"></script>
+    <script src="../../utils/helpers.js"></script>
+    <script src="../../services/api.service.js"></script>
+    <script src="quotes.js"></script>
+</body>
+</html>

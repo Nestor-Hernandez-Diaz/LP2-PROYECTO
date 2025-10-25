@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - LP2 Minimarket</title>
+    
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="../../../public/assets/css/styles.css">
+    
+    <!-- Module Styles -->
+    <link rel="stylesheet" href="settings.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="settings-container">
+        <!-- Header -->
+        <div class="settings-header">
+            <div class="header-content">
+                <div class="header-info">
+                    <h1 class="page-title">
+                        <i class="fas fa-cog"></i>
+                        Configuración del Sistema
+                    </h1>
+                    <p class="page-subtitle">Administra la configuración general del sistema</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-success" id="saveAllBtn">
+                        <i class="fas fa-save"></i>
+                        Guardar Todo
+                    </button>
+                    <button class="btn btn-warning" id="backupBtn">
+                        <i class="fas fa-download"></i>
+                        Crear Respaldo
+                    </button>
+                    <button class="btn btn-info" id="restoreBtn">
+                        <i class="fas fa-upload"></i>
+                        Restaurar
+                    </button>
+                    <button class="btn btn-outline-primary" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i>
+                        Actualizar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Navigation -->
+        <div class="settings-navigation">
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="general">
+                    <i class="fas fa-cog"></i>
+                    General
+                </button>
+                <button class="nav-tab" data-tab="company">
+                    <i class="fas fa-building"></i>
+                    Empresa
+                </button>
+                <button class="nav-tab" data-tab="pos">
+                    <i class="fas fa-cash-register"></i>
+                    Punto de Venta
+                </button>
+                <button class="nav-tab" data-tab="inventory">
+                    <i class="fas fa-boxes"></i>
+                    Inventario
+                </button>
+                <button class="nav-tab" data-tab="notifications">
+                    <i class="fas fa-bell"></i>
+                    Notificaciones
+                </button>
+                <button class="nav-tab" data-tab="security">
+                    <i class="fas fa-shield-alt"></i>
+                    Seguridad
+                </button>
+                <button class="nav-tab" data-tab="system">
+                    <i class="fas fa-server"></i>
+                    Sistema
+                </button>
+            </div>
+        </div>
+
+        <!-- Settings Content -->
+        <div class="settings-content">
+            <!-- General Settings -->
+            <div class="tab-content active" id="general-tab">
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2>Configuración General</h2>
+                        <p>Configuraciones básicas del sistema</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-group">
+                            <h3>Idioma y Región</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="systemLanguage">Idioma del Sistema</label>
+                                    <select id="systemLanguage" class="form-control">
+                                        <option value="es">Español</option>
+                                        <option value="en">English</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="systemTimezone">Zona Horaria</label>
+                                    <select id="systemTimezone" class="form-control">
+                                        <option value="America/Lima">Lima (UTC-5)</option>
+                                        <option value="America/New_York">New York (UTC-5)</option>
+                                        <option value="Europe/Madrid">Madrid (UTC+1)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="dateFormat">Formato de Fecha</label>
+                                    <select id="dateFormat" class="form-control">
+                                        <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="timeFormat">Formato de Hora</label>
+                                    <select id="timeFormat" class="form-control">
+                                        <option value="24">24 horas</option>
+                                        <option value="12">12 horas (AM/PM)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>Moneda</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="defaultCurrency">Moneda Principal</label>
+                                    <select id="defaultCurrency" class="form-control">
+                                        <option value="PEN">Sol Peruano (S/)</option>
+                                        <option value="USD">Dólar Americano ($)</option>
+                                        <option value="EUR">Euro (€)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="currencyPosition">Posición del Símbolo</label>
+                                    <select id="currencyPosition" class="form-control">
+                                        <option value="before">Antes (S/ 100.00)</option>
+                                        <option value="after">Después (100.00 S/)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="decimalPlaces">Decimales</label>
+                                    <select id="decimalPlaces" class="form-control">
+                                        <option value="0">0</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="thousandSeparator">Separador de Miles</label>
+                                    <select id="thousandSeparator" class="form-control">
+                                        <option value=",">,</option>
+                                        <option value=".">.</option>
+                                        <option value=" ">Espacio</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Settings -->
+            <div class="tab-content" id="company-tab">
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2>Información de la Empresa</h2>
+                        <p>Datos de la empresa que aparecerán en facturas y reportes</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-group">
+                            <h3>Información Básica</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="companyName">Nombre de la Empresa</label>
+                                    <input type="text" id="companyName" class="form-control" placeholder="LP2 Minimarket">
+                                </div>
+                                <div class="form-group">
+                                    <label for="companyRuc">RUC</label>
+                                    <input type="text" id="companyRuc" class="form-control" placeholder="20123456789">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="companyAddress">Dirección</label>
+                                    <input type="text" id="companyAddress" class="form-control" placeholder="Av. Principal 123">
+                                </div>
+                                <div class="form-group">
+                                    <label for="companyDistrict">Distrito</label>
+                                    <input type="text" id="companyDistrict" class="form-control" placeholder="Lima">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="companyCity">Ciudad</label>
+                                    <input type="text" id="companyCity" class="form-control" placeholder="Lima">
+                                </div>
+                                <div class="form-group">
+                                    <label for="companyCountry">País</label>
+                                    <input type="text" id="companyCountry" class="form-control" placeholder="Perú">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>Contacto</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="companyPhone">Teléfono</label>
+                                    <input type="text" id="companyPhone" class="form-control" placeholder="+51 1 234-5678">
+                                </div>
+                                <div class="form-group">
+                                    <label for="companyEmail">Email</label>
+                                    <input type="email" id="companyEmail" class="form-control" placeholder="info@lp2minimarket.com">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="companyWebsite">Sitio Web</label>
+                                    <input type="url" id="companyWebsite" class="form-control" placeholder="https://www.lp2minimarket.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="companyManager">Gerente General</label>
+                                    <input type="text" id="companyManager" class="form-control" placeholder="Juan Pérez">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>Logo de la Empresa</h3>
+                            <div class="logo-upload">
+                                <div class="logo-preview">
+                                    <img id="logoPreview" src="" alt="Logo de la empresa" style="display: none;">
+                                    <div class="logo-placeholder">
+                                        <i class="fas fa-image"></i>
+                                        <p>Sin logo</p>
+                                    </div>
+                                </div>
+                                <div class="logo-actions">
+                                    <input type="file" id="logoFile" accept="image/*" style="display: none;">
+                                    <button type="button" class="btn btn-primary" onclick="document.getElementById('logoFile').click()">
+                                        <i class="fas fa-upload"></i>
+                                        Subir Logo
+                                    </button>
+                                    <button type="button" class="btn btn-danger" id="removeLogo">
+                                        <i class="fas fa-trash"></i>
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- POS Settings -->
+            <div class="tab-content" id="pos-tab">
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2>Configuración del Punto de Venta</h2>
+                        <p>Configuraciones específicas para el sistema de ventas</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-group">
+                            <h3>Facturación</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="invoicePrefix">Prefijo de Factura</label>
+                                    <input type="text" id="invoicePrefix" class="form-control" placeholder="F001">
+                                </div>
+                                <div class="form-group">
+                                    <label for="invoiceStartNumber">Número Inicial</label>
+                                    <input type="number" id="invoiceStartNumber" class="form-control" placeholder="1">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="receiptPrefix">Prefijo de Boleta</label>
+                                    <input type="text" id="receiptPrefix" class="form-control" placeholder="B001">
+                                </div>
+                                <div class="form-group">
+                                    <label for="receiptStartNumber">Número Inicial</label>
+                                    <input type="number" id="receiptStartNumber" class="form-control" placeholder="1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>Impresión</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="printerName">Impresora Predeterminada</label>
+                                    <select id="printerName" class="form-control">
+                                        <option value="">Seleccionar impresora</option>
+                                        <option value="thermal">Impresora Térmica</option>
+                                        <option value="laser">Impresora Láser</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="paperSize">Tamaño de Papel</label>
+                                    <select id="paperSize" class="form-control">
+                                        <option value="80mm">80mm (Térmico)</option>
+                                        <option value="A4">A4</option>
+                                        <option value="letter">Carta</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="autoPrint">
+                                <label for="autoPrint">Imprimir automáticamente después de la venta</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="printLogo">
+                                <label for="printLogo">Incluir logo en las facturas</label>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>Comportamiento</h3>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="allowNegativeStock">
+                                <label for="allowNegativeStock">Permitir ventas con stock negativo</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="requireCustomer">
+                                <label for="requireCustomer">Requerir cliente en todas las ventas</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="showProductImages">
+                                <label for="showProductImages">Mostrar imágenes de productos en POS</label>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="defaultPaymentMethod">Método de Pago Predeterminado</label>
+                                    <select id="defaultPaymentMethod" class="form-control">
+                                        <option value="cash">Efectivo</option>
+                                        <option value="card">Tarjeta</option>
+                                        <option value="transfer">Transferencia</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="maxDiscountPercent">Descuento Máximo (%)</label>
+                                    <input type="number" id="maxDiscountPercent" class="form-control" min="0" max="100" placeholder="10">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Settings -->
+            <div class="tab-content" id="inventory-tab">
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2>Configuración de Inventario</h2>
+                        <p>Configuraciones para el manejo del inventario</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-group">
+                            <h3>Stock y Alertas</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="lowStockThreshold">Umbral de Stock Bajo</label>
+                                    <input type="number" id="lowStockThreshold" class="form-control" min="0" placeholder="10">
+                                </div>
+                                <div class="form-group">
+                                    <label for="criticalStockThreshold">Umbral de Stock Crítico</label>
+                                    <input type="number" id="criticalStockThreshold" class="form-control" min="0" placeholder="5">
+                                </div>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="enableStockAlerts">
+                                <label for="enableStockAlerts">Habilitar alertas de stock bajo</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="autoReorderEnabled">
+                                <label for="autoReorderEnabled">Habilitar reorden automático</label>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>Códigos de Producto</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="barcodePrefix">Prefijo de Código de Barras</label>
+                                    <input type="text" id="barcodePrefix" class="form-control" placeholder="LP2">
+                                </div>
+                                <div class="form-group">
+                                    <label for="barcodeLength">Longitud del Código</label>
+                                    <select id="barcodeLength" class="form-control">
+                                        <option value="8">8 dígitos</option>
+                                        <option value="12">12 dígitos</option>
+                                        <option value="13">13 dígitos</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="autoGenerateBarcode">
+                                <label for="autoGenerateBarcode">Generar códigos automáticamente</label>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>Valorización</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="costMethod">Método de Costeo</label>
+                                    <select id="costMethod" class="form-control">
+                                        <option value="fifo">FIFO (Primero en entrar, primero en salir)</option>
+                                        <option value="lifo">LIFO (Último en entrar, primero en salir)</option>
+                                        <option value="average">Promedio Ponderado</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="defaultMarkup">Margen de Ganancia Predeterminado (%)</label>
+                                    <input type="number" id="defaultMarkup" class="form-control" min="0" placeholder="30">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Settings -->
+            <div class="tab-content" id="notifications-tab">
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2>Configuración de Notificaciones</h2>
+                        <p>Configurar alertas y notificaciones del sistema</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-group">
+                            <h3>Notificaciones por Email</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="smtpServer">Servidor SMTP</label>
+                                    <input type="text" id="smtpServer" class="form-control" placeholder="smtp.gmail.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="smtpPort">Puerto</label>
+                                    <input type="number" id="smtpPort" class="form-control" placeholder="587">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="smtpUsername">Usuario</label>
+                                    <input type="email" id="smtpUsername" class="form-control" placeholder="tu-email@gmail.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="smtpPassword">Contraseña</label>
+                                    <input type="password" id="smtpPassword" class="form-control">
+                                </div>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="enableEmailNotifications">
+                                <label for="enableEmailNotifications">Habilitar notificaciones por email</label>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>Tipos de Notificaciones</h3>
+                            <div class="notification-types">
+                                <div class="notification-item">
+                                    <div class="notification-info">
+                                        <h4>Stock Bajo</h4>
+                                        <p>Notificar cuando el stock esté por debajo del umbral</p>
+                                    </div>
+                                    <div class="notification-controls">
+                                        <input type="checkbox" id="notifyLowStock" checked>
+                                        <label for="notifyLowStock">Activar</label>
+                                    </div>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-info">
+                                        <h4>Ventas Diarias</h4>
+                                        <p>Resumen diario de ventas</p>
+                                    </div>
+                                    <div class="notification-controls">
+                                        <input type="checkbox" id="notifyDailySales">
+                                        <label for="notifyDailySales">Activar</label>
+                                    </div>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-info">
+                                        <h4>Productos Vencidos</h4>
+                                        <p>Alertar sobre productos próximos a vencer</p>
+                                    </div>
+                                    <div class="notification-controls">
+                                        <input type="checkbox" id="notifyExpiredProducts" checked>
+                                        <label for="notifyExpiredProducts">Activar</label>
+                                    </div>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-info">
+                                        <h4>Nuevos Usuarios</h4>
+                                        <p>Notificar cuando se registren nuevos usuarios</p>
+                                    </div>
+                                    <div class="notification-controls">
+                                        <input type="checkbox" id="notifyNewUsers">
+                                        <label for="notifyNewUsers">Activar</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Settings -->
+            <div class="tab-content" id="security-tab">
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2>Configuración de Seguridad</h2>
+                        <p>Configuraciones de seguridad y acceso al sistema</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-group">
+                            <h3>Políticas de Contraseña</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="minPasswordLength">Longitud Mínima</label>
+                                    <input type="number" id="minPasswordLength" class="form-control" min="4" max="20" placeholder="8">
+                                </div>
+                                <div class="form-group">
+                                    <label for="passwordExpireDays">Expiración (días)</label>
+                                    <input type="number" id="passwordExpireDays" class="form-control" min="0" placeholder="90">
+                                </div>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="requireUppercase">
+                                <label for="requireUppercase">Requerir mayúsculas</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="requireNumbers">
+                                <label for="requireNumbers">Requerir números</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="requireSpecialChars">
+                                <label for="requireSpecialChars">Requerir caracteres especiales</label>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>Sesiones</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="sessionTimeout">Tiempo de Sesión (minutos)</label>
+                                    <input type="number" id="sessionTimeout" class="form-control" min="5" placeholder="30">
+                                </div>
+                                <div class="form-group">
+                                    <label for="maxLoginAttempts">Intentos Máximos de Login</label>
+                                    <input type="number" id="maxLoginAttempts" class="form-control" min="1" placeholder="5">
+                                </div>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="enableTwoFactor">
+                                <label for="enableTwoFactor">Habilitar autenticación de dos factores</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="logUserActivity">
+                                <label for="logUserActivity">Registrar actividad de usuarios</label>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>Respaldos de Seguridad</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="backupFrequency">Frecuencia de Respaldo</label>
+                                    <select id="backupFrequency" class="form-control">
+                                        <option value="daily">Diario</option>
+                                        <option value="weekly">Semanal</option>
+                                        <option value="monthly">Mensual</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="backupRetention">Retención (días)</label>
+                                    <input type="number" id="backupRetention" class="form-control" min="1" placeholder="30">
+                                </div>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="autoBackup">
+                                <label for="autoBackup">Respaldo automático</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Settings -->
+            <div class="tab-content" id="system-tab">
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2>Configuración del Sistema</h2>
+                        <p>Configuraciones técnicas y de mantenimiento</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-group">
+                            <h3>Base de Datos</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="dbHost">Servidor</label>
+                                    <input type="text" id="dbHost" class="form-control" placeholder="localhost">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dbPort">Puerto</label>
+                                    <input type="number" id="dbPort" class="form-control" placeholder="3306">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="dbName">Base de Datos</label>
+                                    <input type="text" id="dbName" class="form-control" placeholder="lp2_minimarket">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dbUsername">Usuario</label>
+                                    <input type="text" id="dbUsername" class="form-control" placeholder="root">
+                                </div>
+                            </div>
+                            <div class="db-actions">
+                                <button type="button" class="btn btn-info" id="testConnectionBtn">
+                                    <i class="fas fa-plug"></i>
+                                    Probar Conexión
+                                </button>
+                                <button type="button" class="btn btn-warning" id="optimizeDbBtn">
+                                    <i class="fas fa-tools"></i>
+                                    Optimizar BD
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>Rendimiento</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="cacheEnabled">Cache</label>
+                                    <select id="cacheEnabled" class="form-control">
+                                        <option value="true">Habilitado</option>
+                                        <option value="false">Deshabilitado</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cacheTimeout">Tiempo de Cache (minutos)</label>
+                                    <input type="number" id="cacheTimeout" class="form-control" min="1" placeholder="60">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="maxFileSize">Tamaño Máximo de Archivo (MB)</label>
+                                    <input type="number" id="maxFileSize" class="form-control" min="1" placeholder="10">
+                                </div>
+                                <div class="form-group">
+                                    <label for="logLevel">Nivel de Log</label>
+                                    <select id="logLevel" class="form-control">
+                                        <option value="error">Error</option>
+                                        <option value="warning">Warning</option>
+                                        <option value="info">Info</option>
+                                        <option value="debug">Debug</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>Mantenimiento</h3>
+                            <div class="maintenance-actions">
+                                <button type="button" class="btn btn-warning" id="clearCacheBtn">
+                                    <i class="fas fa-broom"></i>
+                                    Limpiar Cache
+                                </button>
+                                <button type="button" class="btn btn-info" id="clearLogsBtn">
+                                    <i class="fas fa-file-alt"></i>
+                                    Limpiar Logs
+                                </button>
+                                <button type="button" class="btn btn-danger" id="resetSystemBtn">
+                                    <i class="fas fa-undo"></i>
+                                    Restablecer Sistema
+                                </button>
+                            </div>
+                            <div class="system-info">
+                                <h4>Información del Sistema</h4>
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <span class="info-label">Versión:</span>
+                                        <span class="info-value">1.0.0</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">PHP:</span>
+                                        <span class="info-value">8.1.0</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">MySQL:</span>
+                                        <span class="info-value">8.0.30</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Espacio Usado:</span>
+                                        <span class="info-value">245 MB</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backup Modal -->
+    <div class="modal" id="backupModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Crear Respaldo del Sistema</h3>
+                <button class="close" onclick="settingsModule.closeModal('backupModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="backup-options">
+                    <h4>Seleccionar qué respaldar:</h4>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="backupDatabase" checked>
+                        <label for="backupDatabase">Base de datos</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="backupFiles" checked>
+                        <label for="backupFiles">Archivos del sistema</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="backupImages">
+                        <label for="backupImages">Imágenes de productos</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="backupLogs">
+                        <label for="backupLogs">Archivos de log</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="backupName">Nombre del respaldo:</label>
+                    <input type="text" id="backupName" class="form-control" placeholder="respaldo_2024_01_15">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="settingsModule.closeModal('backupModal')">Cancelar</button>
+                <button class="btn btn-success" onclick="settingsModule.createBackup()">
+                    <i class="fas fa-download"></i>
+                    Crear Respaldo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Restore Modal -->
+    <div class="modal" id="restoreModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Restaurar Sistema</h3>
+                <button class="close" onclick="settingsModule.closeModal('restoreModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="restore-upload">
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Arrastra el archivo de respaldo aquí o haz clic para seleccionar</p>
+                        <input type="file" id="restoreFile" accept=".zip,.sql" style="display: none;">
+                    </div>
+                </div>
+                <div class="restore-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p><strong>Advertencia:</strong> Esta acción sobrescribirá todos los datos actuales del sistema. Asegúrate de tener un respaldo antes de continuar.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="settingsModule.closeModal('restoreModal')">Cancelar</button>
+                <button class="btn btn-danger" onclick="settingsModule.restoreSystem()" disabled id="restoreBtn">
+                    <i class="fas fa-upload"></i>
+                    Restaurar Sistema
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+        </div>
+        <div class="loader-text">Cargando...</div>
+    </div>
+
+    <!-- Global Scripts -->
+    <script src="../../utils/config.js"></script>
+    <script src="../../utils/helpers.js"></script>
+    <script src="../../services/api.service.js"></script>
+    
+    <!-- Module Script -->
+    <script src="settings.js"></script>
+</body>
+</html>

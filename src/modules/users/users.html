@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - LP2 MINIMARKET</title>
+    
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="../../../public/assets/css/styles.css">
+    <!-- Module CSS -->
+    <link rel="stylesheet" href="users.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="users-container">
+        <!-- Header -->
+        <div class="users-header">
+            <div class="header-content">
+                <div class="header-info">
+                    <h1 class="page-title">
+                        <i class="fas fa-users"></i>
+                        Gestión de Usuarios
+                    </h1>
+                    <p class="page-subtitle">Administra usuarios, roles y permisos del sistema</p>
+                </div>
+                <div class="header-actions">
+                    <button id="newUserBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Nuevo Usuario
+                    </button>
+                    <button id="exportBtn" class="btn btn-outline-secondary">
+                        <i class="fas fa-download"></i>
+                        Exportar
+                    </button>
+                    <button id="refreshBtn" class="btn btn-outline-secondary">
+                        <i class="fas fa-sync-alt"></i>
+                        Actualizar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="users-filters">
+            <div class="filters-content">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por nombre, email o usuario...">
+                </div>
+                
+                <div class="filter-group">
+                    <select id="roleFilter" class="filter-select">
+                        <option value="">Todos los roles</option>
+                        <option value="admin">Administrador</option>
+                        <option value="manager">Gerente</option>
+                        <option value="cashier">Cajero</option>
+                        <option value="inventory">Inventario</option>
+                    </select>
+                    
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">Todos los estados</option>
+                        <option value="active">Activo</option>
+                        <option value="inactive">Inactivo</option>
+                        <option value="suspended">Suspendido</option>
+                    </select>
+                    
+                    <input type="date" id="dateFromFilter" class="filter-input" placeholder="Desde">
+                    <input type="date" id="dateToFilter" class="filter-input" placeholder="Hasta">
+                    
+                    <button id="clearFiltersBtn" class="btn btn-outline-secondary">
+                        <i class="fas fa-times"></i>
+                        Limpiar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Statistics -->
+        <div class="users-stats">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-label">Total Usuarios</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="activeUsers">0</div>
+                    <div class="stat-label">Usuarios Activos</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-user-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="onlineUsers">0</div>
+                    <div class="stat-label">En Línea</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="adminUsers">0</div>
+                    <div class="stat-label">Administradores</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="users-section">
+            <div class="section-header">
+                <h2>Lista de Usuarios</h2>
+                <div class="table-actions">
+                    <div class="bulk-actions">
+                        <select id="bulkActionSelect" class="bulk-select">
+                            <option value="">Acciones en lote</option>
+                            <option value="activate">Activar seleccionados</option>
+                            <option value="deactivate">Desactivar seleccionados</option>
+                            <option value="delete">Eliminar seleccionados</option>
+                        </select>
+                        <button id="applyBulkAction" class="btn btn-outline-primary btn-sm">Aplicar</button>
+                    </div>
+                    
+                    <div class="view-controls">
+                        <button class="view-toggle active" data-view="table">
+                            <i class="fas fa-table"></i>
+                        </button>
+                        <button class="view-toggle" data-view="grid">
+                            <i class="fas fa-th"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="usersTable" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="selectAllCheckbox">
+                            </th>
+                            <th class="sortable" data-field="name">
+                                Usuario
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th class="sortable" data-field="email">
+                                Email
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th class="sortable" data-field="role">
+                                Rol
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th class="sortable" data-field="lastLogin">
+                                Último Acceso
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th class="sortable" data-field="status">
+                                Estado
+                                <i class="fas fa-sort"></i>
+                            </th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Users will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="table-footer">
+                <div class="pagination-info">
+                    <span>Mostrando <span id="startItem">0</span> - <span id="endItem">0</span> de <span id="totalItems">0</span> usuarios</span>
+                </div>
+                
+                <div class="pagination-controls">
+                    <select id="itemsPerPageSelect" class="pagination-select">
+                        <option value="10">10 por página</option>
+                        <option value="25">25 por página</option>
+                        <option value="50">50 por página</option>
+                        <option value="100">100 por página</option>
+                    </select>
+                    
+                    <div id="paginationContainer" class="pagination">
+                        <!-- Pagination buttons will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Nuevo Usuario</h3>
+                <button class="close">&times;</button>
+            </div>
+            
+            <form id="userForm" class="modal-body">
+                <input type="hidden" id="userId" name="id">
+                
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <h4>Información Personal</h4>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">Nombres *</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lastName">Apellidos *</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Teléfono</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="document">Documento</label>
+                            <input type="text" id="document" name="document">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="birthDate">Fecha de Nacimiento</label>
+                            <input type="date" id="birthDate" name="birthDate">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Information -->
+                <div class="form-section">
+                    <h4>Información de Cuenta</h4>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="username">Usuario *</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="role">Rol *</label>
+                            <select id="role" name="role" required>
+                                <option value="">Seleccionar rol</option>
+                                <option value="admin">Administrador</option>
+                                <option value="manager">Gerente</option>
+                                <option value="cashier">Cajero</option>
+                                <option value="inventory">Inventario</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row" id="passwordSection">
+                        <div class="form-group">
+                            <label for="password">Contraseña *</label>
+                            <div class="password-input">
+                                <input type="password" id="password" name="password">
+                                <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirmar Contraseña *</label>
+                            <div class="password-input">
+                                <input type="password" id="confirmPassword" name="confirmPassword">
+                                <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="status">Estado</label>
+                            <select id="status" name="status">
+                                <option value="active">Activo</option>
+                                <option value="inactive">Inactivo</option>
+                                <option value="suspended">Suspendido</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="mustChangePassword" name="mustChangePassword">
+                                <label for="mustChangePassword">Debe cambiar contraseña en el próximo acceso</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Permissions -->
+                <div class="form-section">
+                    <h4>Permisos</h4>
+                    
+                    <div class="permissions-grid">
+                        <div class="permission-group">
+                            <h5>Ventas</h5>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_sales_view" name="permissions" value="sales_view">
+                                <label for="perm_sales_view">Ver ventas</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_sales_create" name="permissions" value="sales_create">
+                                <label for="perm_sales_create">Crear ventas</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_sales_edit" name="permissions" value="sales_edit">
+                                <label for="perm_sales_edit">Editar ventas</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_sales_delete" name="permissions" value="sales_delete">
+                                <label for="perm_sales_delete">Eliminar ventas</label>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-group">
+                            <h5>Inventario</h5>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_inventory_view" name="permissions" value="inventory_view">
+                                <label for="perm_inventory_view">Ver inventario</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_inventory_create" name="permissions" value="inventory_create">
+                                <label for="perm_inventory_create">Crear productos</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_inventory_edit" name="permissions" value="inventory_edit">
+                                <label for="perm_inventory_edit">Editar productos</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_inventory_delete" name="permissions" value="inventory_delete">
+                                <label for="perm_inventory_delete">Eliminar productos</label>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-group">
+                            <h5>Compras</h5>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_purchases_view" name="permissions" value="purchases_view">
+                                <label for="perm_purchases_view">Ver compras</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_purchases_create" name="permissions" value="purchases_create">
+                                <label for="perm_purchases_create">Crear compras</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_purchases_edit" name="permissions" value="purchases_edit">
+                                <label for="perm_purchases_edit">Editar compras</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_purchases_delete" name="permissions" value="purchases_delete">
+                                <label for="perm_purchases_delete">Eliminar compras</label>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-group">
+                            <h5>Usuarios</h5>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_users_view" name="permissions" value="users_view">
+                                <label for="perm_users_view">Ver usuarios</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_users_create" name="permissions" value="users_create">
+                                <label for="perm_users_create">Crear usuarios</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_users_edit" name="permissions" value="users_edit">
+                                <label for="perm_users_edit">Editar usuarios</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_users_delete" name="permissions" value="users_delete">
+                                <label for="perm_users_delete">Eliminar usuarios</label>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-group">
+                            <h5>Reportes</h5>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_reports_view" name="permissions" value="reports_view">
+                                <label for="perm_reports_view">Ver reportes</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_reports_export" name="permissions" value="reports_export">
+                                <label for="perm_reports_export">Exportar reportes</label>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-group">
+                            <h5>Configuración</h5>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_settings_view" name="permissions" value="settings_view">
+                                <label for="perm_settings_view">Ver configuración</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_settings_edit" name="permissions" value="settings_edit">
+                                <label for="perm_settings_edit">Editar configuración</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes -->
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="notes">Notas</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="Notas adicionales sobre el usuario..."></textarea>
+                    </div>
+                </div>
+            </form>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="usersModule.hideModal(document.getElementById('userModal'))">Cancelar</button>
+                <button type="submit" form="userForm" class="btn btn-primary">Guardar Usuario</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View User Modal -->
+    <div id="viewUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Detalles del Usuario</h3>
+                <button class="close">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div id="userPreviewContent">
+                    <!-- User details will be populated here -->
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="usersModule.hideModal(document.getElementById('viewUserModal'))">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="usersModule.printUser()">
+                    <i class="fas fa-print"></i>
+                    Imprimir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loader -->
+    <div id="loader" class="loader">
+        <div class="loader-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+        </div>
+        <div class="loader-text">Cargando...</div>
+    </div>
+
+    <!-- Global JavaScript -->
+    <script src="../../utils/config.js"></script>
+    <script src="../../utils/helpers.js"></script>
+    <script src="../../services/api.service.js"></script>
+    
+    <!-- Module JavaScript -->
+    <script src="users.js"></script>
+</body>
+</html>

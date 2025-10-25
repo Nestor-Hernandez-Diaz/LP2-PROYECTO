@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario - Sistema de Ventas Minimarket</title>
+    <link rel="stylesheet" href="../../../public/assets/css/styles.css">
+    <link rel="stylesheet" href="inventory.css">
+</head>
+<body>
+    <!-- Contenedor principal del inventario -->
+    <div class="inventory-container">
+        <!-- Header del inventario -->
+        <div class="inventory-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>Gestión de Inventario</h1>
+                    <p>Administra productos, stock y categorías</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="exportInventoryBtn">
+                        📊 Exportar
+                    </button>
+                    <button class="btn btn-primary" id="addProductBtn">
+                        ➕ Nuevo Producto
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros y búsqueda -->
+        <div class="inventory-filters">
+            <div class="filters-row">
+                <div class="search-box">
+                    <input type="text" id="productSearch" placeholder="Buscar productos..." class="search-input">
+                    <button class="search-btn" id="searchBtn">🔍</button>
+                </div>
+                
+                <div class="filter-group">
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="">Todas las categorías</option>
+                        <option value="bebidas">Bebidas</option>
+                        <option value="abarrotes">Abarrotes</option>
+                        <option value="lacteos">Lácteos</option>
+                        <option value="panaderia">Panadería</option>
+                        <option value="limpieza">Limpieza</option>
+                        <option value="snacks">Snacks</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <select id="stockFilter" class="filter-select">
+                        <option value="">Todo el stock</option>
+                        <option value="low">Stock bajo (< 10)</option>
+                        <option value="medium">Stock medio (10-50)</option>
+                        <option value="high">Stock alto (> 50)</option>
+                        <option value="out">Sin stock</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">Todos los estados</option>
+                        <option value="active">Activos</option>
+                        <option value="inactive">Inactivos</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-outline" id="clearFiltersBtn">
+                    🗑️ Limpiar
+                </button>
+            </div>
+        </div>
+
+        <!-- Estadísticas rápidas -->
+        <div class="inventory-stats">
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="totalProducts">0</div>
+                    <div class="stat-label">Total Productos</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="totalValue">S/ 0.00</div>
+                    <div class="stat-label">Valor Total</div>
+                </div>
+            </div>
+            
+            <div class="stat-card warning">
+                <div class="stat-icon">⚠️</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="lowStockCount">0</div>
+                    <div class="stat-label">Stock Bajo</div>
+                </div>
+            </div>
+            
+            <div class="stat-card error">
+                <div class="stat-icon">❌</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="outOfStockCount">0</div>
+                    <div class="stat-label">Sin Stock</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de productos -->
+        <div class="inventory-table-container">
+            <div class="table-header">
+                <h3>Lista de Productos</h3>
+                <div class="table-actions">
+                    <button class="btn btn-sm btn-outline" id="refreshTableBtn">
+                        🔄 Actualizar
+                    </button>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="table" id="tableViewBtn">📋</button>
+                        <button class="view-btn" data-view="grid" id="gridViewBtn">⊞</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vista de tabla -->
+            <div class="table-view" id="tableView">
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="selectAllProducts">
+                            </th>
+                            <th class="sortable" data-sort="code">
+                                Código <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="name">
+                                Producto <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="category">
+                                Categoría <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="stock">
+                                Stock <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="price">
+                                Precio <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="status">
+                                Estado <span class="sort-icon">↕️</span>
+                            </th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <!-- Los productos se cargarán dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Vista de cuadrícula -->
+            <div class="grid-view hidden" id="gridView">
+                <div class="products-grid" id="productsGrid">
+                    <!-- Los productos se cargarán dinámicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Paginación -->
+        <div class="pagination-container">
+            <div class="pagination-info">
+                <span id="paginationInfo">Mostrando 0 de 0 productos</span>
+            </div>
+            <div class="pagination-controls">
+                <button class="pagination-btn" id="firstPageBtn" disabled>⏮️</button>
+                <button class="pagination-btn" id="prevPageBtn" disabled>◀️</button>
+                <div class="pagination-numbers" id="paginationNumbers">
+                    <!-- Los números se generarán dinámicamente -->
+                </div>
+                <button class="pagination-btn" id="nextPageBtn">▶️</button>
+                <button class="pagination-btn" id="lastPageBtn">⏭️</button>
+            </div>
+            <div class="pagination-size">
+                <select id="pageSizeSelect">
+                    <option value="10">10 por página</option>
+                    <option value="25" selected>25 por página</option>
+                    <option value="50">50 por página</option>
+                    <option value="100">100 por página</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para agregar/editar producto -->
+    <div class="modal hidden" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="productModalTitle">Nuevo Producto</h3>
+                <button class="modal-close" id="closeProductModalBtn">✕</button>
+            </div>
+            
+            <form class="modal-body" id="productForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productCode">Código del Producto *</label>
+                        <input type="text" id="productCode" name="code" required>
+                        <div class="form-error" id="codeError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productBarcode">Código de Barras</label>
+                        <input type="text" id="productBarcode" name="barcode">
+                        <button type="button" class="btn btn-sm btn-outline" id="generateBarcodeBtn">
+                            Generar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productName">Nombre del Producto *</label>
+                    <input type="text" id="productName" name="name" required>
+                    <div class="form-error" id="nameError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productDescription">Descripción</label>
+                    <textarea id="productDescription" name="description" rows="3"></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productCategory">Categoría *</label>
+                        <select id="productCategory" name="category" required>
+                            <option value="">Seleccionar categoría</option>
+                            <option value="bebidas">Bebidas</option>
+                            <option value="abarrotes">Abarrotes</option>
+                            <option value="lacteos">Lácteos</option>
+                            <option value="panaderia">Panadería</option>
+                            <option value="limpieza">Limpieza</option>
+                            <option value="snacks">Snacks</option>
+                        </select>
+                        <div class="form-error" id="categoryError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productBrand">Marca</label>
+                        <input type="text" id="productBrand" name="brand">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productCost">Precio de Costo *</label>
+                        <input type="number" id="productCost" name="cost" step="0.01" min="0" required>
+                        <div class="form-error" id="costError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productPrice">Precio de Venta *</label>
+                        <input type="number" id="productPrice" name="price" step="0.01" min="0" required>
+                        <div class="form-error" id="priceError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productMargin">Margen (%)</label>
+                        <input type="number" id="productMargin" name="margin" readonly>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productStock">Stock Inicial *</label>
+                        <input type="number" id="productStock" name="stock" min="0" required>
+                        <div class="form-error" id="stockError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productMinStock">Stock Mínimo</label>
+                        <input type="number" id="productMinStock" name="minStock" min="0" value="5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productUnit">Unidad de Medida</label>
+                        <select id="productUnit" name="unit">
+                            <option value="unidad">Unidad</option>
+                            <option value="kg">Kilogramo</option>
+                            <option value="litro">Litro</option>
+                            <option value="metro">Metro</option>
+                            <option value="caja">Caja</option>
+                            <option value="paquete">Paquete</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productSupplier">Proveedor</label>
+                        <input type="text" id="productSupplier" name="supplier">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productLocation">Ubicación</label>
+                        <input type="text" id="productLocation" name="location" placeholder="Ej: Pasillo 1, Estante A">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="productActive" name="active" checked>
+                        <span class="checkbox-custom"></span>
+                        Producto activo
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productImage">Imagen del Producto</label>
+                    <input type="file" id="productImage" name="image" accept="image/*">
+                    <div class="image-preview" id="imagePreview"></div>
+                </div>
+            </form>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelProductBtn">
+                    Cancelar
+                </button>
+                <button type="submit" form="productForm" class="btn btn-primary" id="saveProductBtn">
+                    Guardar Producto
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ajuste de stock -->
+    <div class="modal hidden" id="stockModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ajustar Stock</h3>
+                <button class="modal-close" id="closeStockModalBtn">✕</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="stock-info">
+                    <h4 id="stockProductName">Producto</h4>
+                    <p>Stock actual: <span id="currentStock">0</span> unidades</p>
+                </div>
+                
+                <form id="stockForm">
+                    <div class="form-group">
+                        <label for="stockAdjustment">Tipo de Ajuste</label>
+                        <select id="stockAdjustment" name="adjustment" required>
+                            <option value="">Seleccionar tipo</option>
+                            <option value="add">Agregar stock</option>
+                            <option value="remove">Reducir stock</option>
+                            <option value="set">Establecer stock</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="stockQuantity">Cantidad</label>
+                        <input type="number" id="stockQuantity" name="quantity" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="stockReason">Motivo</label>
+                        <select id="stockReason" name="reason" required>
+                            <option value="">Seleccionar motivo</option>
+                            <option value="purchase">Compra</option>
+                            <option value="return">Devolución</option>
+                            <option value="damage">Producto dañado</option>
+                            <option value="theft">Robo/Pérdida</option>
+                            <option value="expired">Producto vencido</option>
+                            <option value="inventory">Inventario físico</option>
+                            <option value="other">Otro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="stockNotes">Notas adicionales</label>
+                        <textarea id="stockNotes" name="notes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelStockBtn">
+                    Cancelar
+                </button>
+                <button type="submit" form="stockForm" class="btn btn-primary" id="saveStockBtn">
+                    Ajustar Stock
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loader -->
+    <div class="loader hidden" id="inventoryLoader">
+        <div class="loader-spinner"></div>
+        <p>Cargando inventario...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../utils/config.js"></script>
+    <script src="../../utils/helpers.js"></script>
+    <script src="../../services/api.service.js"></script>
+    <script src="inventory.js"></script>
+</body>
+</html>

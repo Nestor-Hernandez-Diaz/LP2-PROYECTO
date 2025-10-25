@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LP2 Minimarket - Dashboard</title>
+    <link rel="stylesheet" href="public/assets/css/dashboard.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>LP2 Minimarket</h2>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#dashboard" class="nav-link active" data-module="dashboard">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#sales" class="nav-link" data-module="sales">
+                        <span class="nav-icon">💰</span>
+                        <span class="nav-text">Ventas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#inventory" class="nav-link" data-module="inventory">
+                        <span class="nav-icon">📦</span>
+                        <span class="nav-text">Inventario</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#purchases" class="nav-link" data-module="purchases">
+                        <span class="nav-icon">🛒</span>
+                        <span class="nav-text">Compras</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#quotes" class="nav-link" data-module="quotes">
+                        <span class="nav-icon">📋</span>
+                        <span class="nav-text">Cotizaciones</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#cash" class="nav-link" data-module="cash">
+                        <span class="nav-icon">💵</span>
+                        <span class="nav-text">Caja</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#users" class="nav-link" data-module="users">
+                        <span class="nav-icon">👥</span>
+                        <span class="nav-text">Usuarios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#settings" class="nav-link" data-module="settings">
+                        <span class="nav-icon">⚙️</span>
+                        <span class="nav-text">Configuración</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Contenido principal -->
+    <div class="main-wrapper">
+        <!-- Header -->
+        <header id="header" class="header">
+            <div class="header-left">
+                <button id="menu-toggle" class="menu-toggle">☰</button>
+                <h1 id="current-module-title">Dashboard</h1>
+            </div>
+            
+            <div class="header-right">
+                <div class="user-info">
+                    <span class="user-avatar">👤</span>
+                    <span id="username-display">Admin</span>
+                    <button id="logout-btn" class="logout-btn">Salir</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Contenido dinámico -->
+        <main id="main-content" class="main-content">
+            <div class="module-container">
+                <h2>Bienvenido al Dashboard</h2>
+                <p>Selecciona un módulo del menú lateral para comenzar.</p>
+                
+                <!-- Aquí se cargará el contenido de cada módulo -->
+                <div id="module-content" class="module-content">
+                    <!-- El contenido específico de cada módulo se cargará aquí -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="src/dashboard/dashboard.js"></script>
+</body>
+</html>

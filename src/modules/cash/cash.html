@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caja - Sistema de Ventas Minimarket</title>
+    
+    <!-- CSS Global -->
+    <link rel="stylesheet" href="../../../public/assets/css/styles.css">
+    <!-- CSS del Módulo -->
+    <link rel="stylesheet" href="cash.css">
+</head>
+<body>
+    <div class="cash-container">
+        <!-- Header del módulo -->
+        <div class="module-header">
+            <div class="header-content">
+                <div class="header-info">
+                    <h1 class="module-title">Gestión de Caja</h1>
+                    <p class="module-subtitle">Control de movimientos de efectivo y arqueo de caja</p>
+                </div>
+                <div class="header-actions">
+                    <button id="openCashBtn" class="btn btn-success">
+                        <span class="btn-icon">🔓</span>
+                        Abrir Caja
+                    </button>
+                    <button id="closeCashBtn" class="btn btn-warning">
+                        <span class="btn-icon">🔒</span>
+                        Cerrar Caja
+                    </button>
+                    <button id="newMovementBtn" class="btn btn-primary">
+                        <span class="btn-icon">💰</span>
+                        Nuevo Movimiento
+                    </button>
+                    <button id="exportCashBtn" class="btn btn-secondary">
+                        <span class="btn-icon">📊</span>
+                        Exportar
+                    </button>
+                    <button id="refreshCashBtn" class="btn btn-outline">
+                        <span class="btn-icon">🔄</span>
+                        Actualizar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estado de la caja -->
+        <div class="cash-status-section">
+            <div class="cash-status-card">
+                <div class="status-header">
+                    <h3>Estado de Caja</h3>
+                    <span id="cashStatusBadge" class="status-badge closed">Cerrada</span>
+                </div>
+                <div class="status-content">
+                    <div class="status-info">
+                        <div class="info-item">
+                            <label>Fecha de Apertura:</label>
+                            <span id="openDate">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Usuario:</label>
+                            <span id="cashUser">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Monto Inicial:</label>
+                            <span id="initialAmount">S/ 0.00</span>
+                        </div>
+                    </div>
+                    <div class="status-amounts">
+                        <div class="amount-card income">
+                            <div class="amount-icon">💰</div>
+                            <div class="amount-info">
+                                <div class="amount-label">Ingresos</div>
+                                <div class="amount-value" id="totalIncome">S/ 0.00</div>
+                            </div>
+                        </div>
+                        <div class="amount-card expense">
+                            <div class="amount-icon">💸</div>
+                            <div class="amount-info">
+                                <div class="amount-label">Egresos</div>
+                                <div class="amount-value" id="totalExpense">S/ 0.00</div>
+                            </div>
+                        </div>
+                        <div class="amount-card balance">
+                            <div class="amount-icon">🏦</div>
+                            <div class="amount-info">
+                                <div class="amount-label">Saldo Actual</div>
+                                <div class="amount-value" id="currentBalance">S/ 0.00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros y búsqueda -->
+        <div class="filters-section">
+            <div class="search-box">
+                <input type="text" id="movementSearch" placeholder="Buscar por concepto, usuario o referencia...">
+                <button id="searchBtn" class="search-btn">🔍</button>
+            </div>
+            <div class="filters-row">
+                <select id="typeFilter" class="filter-select">
+                    <option value="">Todos los tipos</option>
+                    <option value="income">Ingresos</option>
+                    <option value="expense">Egresos</option>
+                    <option value="opening">Apertura</option>
+                    <option value="closing">Cierre</option>
+                </select>
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">Todas las categorías</option>
+                    <option value="sales">Ventas</option>
+                    <option value="purchases">Compras</option>
+                    <option value="expenses">Gastos</option>
+                    <option value="adjustments">Ajustes</option>
+                    <option value="other">Otros</option>
+                </select>
+                <select id="dateFilter" class="filter-select">
+                    <option value="">Todas las fechas</option>
+                    <option value="today">Hoy</option>
+                    <option value="week">Esta semana</option>
+                    <option value="month">Este mes</option>
+                    <option value="custom">Personalizado</option>
+                </select>
+                <input type="date" id="dateFromFilter" class="filter-input hidden">
+                <input type="date" id="dateToFilter" class="filter-input hidden">
+                <button id="clearFiltersBtn" class="btn btn-outline">Limpiar Filtros</button>
+            </div>
+        </div>
+
+        <!-- Estadísticas rápidas -->
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="todayMovements">0</div>
+                    <div class="stat-label">Movimientos Hoy</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💵</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="todayIncome">S/ 0.00</div>
+                    <div class="stat-label">Ingresos Hoy</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💸</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="todayExpense">S/ 0.00</div>
+                    <div class="stat-label">Egresos Hoy</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⚖️</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="todayBalance">S/ 0.00</div>
+                    <div class="stat-label">Balance Hoy</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de movimientos -->
+        <div class="movements-section">
+            <div class="table-header">
+                <div class="table-actions">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="selectAllMovements">
+                        Seleccionar todo
+                    </label>
+                    <span id="selectedCount" class="selected-count">0 seleccionados</span>
+                </div>
+                <div class="table-controls">
+                    <select id="pageSizeSelect" class="page-size-select">
+                        <option value="25">25 por página</option>
+                        <option value="50">50 por página</option>
+                        <option value="100">100 por página</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="movements-table">
+                    <thead>
+                        <tr>
+                            <th width="40">
+                                <input type="checkbox" id="selectAllHeader">
+                            </th>
+                            <th class="sortable" data-sort="date">
+                                Fecha/Hora
+                                <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="type">
+                                Tipo
+                                <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="category">
+                                Categoría
+                                <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="concept">
+                                Concepto
+                                <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="amount">
+                                Monto
+                                <span class="sort-icon">↕️</span>
+                            </th>
+                            <th class="sortable" data-sort="user">
+                                Usuario
+                                <span class="sort-icon">↕️</span>
+                            </th>
+                            <th width="120">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="movementsTableBody">
+                        <!-- Los movimientos se cargarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    <span id="paginationInfo">Mostrando 0-0 de 0 movimientos</span>
+                </div>
+                <div class="pagination-controls">
+                    <button id="firstPageBtn" class="pagination-btn">⏮️</button>
+                    <button id="prevPageBtn" class="pagination-btn">⬅️</button>
+                    <div id="paginationNumbers" class="pagination-numbers"></div>
+                    <button id="nextPageBtn" class="pagination-btn">➡️</button>
+                    <button id="lastPageBtn" class="pagination-btn">⏭️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loader -->
+        <div id="cashLoader" class="loader hidden">
+            <div class="spinner"></div>
+            <p>Cargando movimientos...</p>
+        </div>
+    </div>
+
+    <!-- Modal de apertura de caja -->
+    <div id="openCashModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="openCashModalTitle">Apertura de Caja</h3>
+                <button id="closeOpenCashModalBtn" class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="openCashForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="openingDate">Fecha de Apertura</label>
+                            <input type="datetime-local" id="openingDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="openingUser">Usuario</label>
+                            <input type="text" id="openingUser" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="initialAmount">Monto Inicial</label>
+                            <input type="number" id="initialAmount" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="openingNotes">Observaciones</label>
+                            <textarea id="openingNotes" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelOpenCashBtn" class="btn btn-secondary">Cancelar</button>
+                <button id="confirmOpenCashBtn" class="btn btn-success">Abrir Caja</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de cierre de caja -->
+    <div id="closeCashModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="closeCashModalTitle">Cierre de Caja</h3>
+                <button id="closeCloseCashModalBtn" class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="closing-summary">
+                    <h4>Resumen del Día</h4>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <label>Monto Inicial:</label>
+                            <span id="closingInitialAmount">S/ 0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>Total Ingresos:</label>
+                            <span id="closingTotalIncome">S/ 0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>Total Egresos:</label>
+                            <span id="closingTotalExpense">S/ 0.00</span>
+                        </div>
+                        <div class="summary-item total">
+                            <label>Saldo Esperado:</label>
+                            <span id="closingExpectedBalance">S/ 0.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <form id="closeCashForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="closingDate">Fecha de Cierre</label>
+                            <input type="datetime-local" id="closingDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="actualAmount">Monto Real en Caja</label>
+                            <input type="number" id="actualAmount" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="difference">Diferencia</label>
+                            <input type="number" id="difference" step="0.01" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="closingNotes">Observaciones</label>
+                            <textarea id="closingNotes" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelCloseCashBtn" class="btn btn-secondary">Cancelar</button>
+                <button id="confirmCloseCashBtn" class="btn btn-warning">Cerrar Caja</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de nuevo movimiento -->
+    <div id="movementModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="movementModalTitle">Nuevo Movimiento</h3>
+                <button id="closeMovementModalBtn" class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="movementForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="movementType">Tipo de Movimiento</label>
+                            <select id="movementType" required>
+                                <option value="">Seleccionar tipo</option>
+                                <option value="income">Ingreso</option>
+                                <option value="expense">Egreso</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="movementCategory">Categoría</label>
+                            <select id="movementCategory" required>
+                                <option value="">Seleccionar categoría</option>
+                                <option value="sales">Ventas</option>
+                                <option value="purchases">Compras</option>
+                                <option value="expenses">Gastos</option>
+                                <option value="adjustments">Ajustes</option>
+                                <option value="other">Otros</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="movementAmount">Monto</label>
+                            <input type="number" id="movementAmount" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="movementDate">Fecha y Hora</label>
+                            <input type="datetime-local" id="movementDate" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="movementConcept">Concepto</label>
+                            <input type="text" id="movementConcept" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="movementReference">Referencia</label>
+                            <input type="text" id="movementReference">
+                        </div>
+                        <div class="form-group">
+                            <label for="movementUser">Usuario</label>
+                            <input type="text" id="movementUser" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="movementNotes">Observaciones</label>
+                            <textarea id="movementNotes" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelMovementBtn" class="btn btn-secondary">Cancelar</button>
+                <button id="saveMovementBtn" class="btn btn-primary">Guardar Movimiento</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de vista de movimiento -->
+    <div id="viewMovementModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalle del Movimiento</h3>
+                <button id="closeViewMovementBtn" class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <div id="movementPreview" class="movement-preview">
+                    <!-- El contenido se cargará dinámicamente -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="printMovementBtn" class="btn btn-secondary">Imprimir</button>
+                <button id="closeViewMovementFooterBtn" class="btn btn-primary">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../utils/config.js"></script>
+    <script src="../../utils/helpers.js"></script>
+    <script src="../../services/api.service.js"></script>
+    <script src="cash.js"></script>
+</body>
+</html>

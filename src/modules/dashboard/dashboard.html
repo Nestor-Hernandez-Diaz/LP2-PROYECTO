@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<div class="dashboard-container">
+    <!-- ===== HEADER DEL DASHBOARD ===== -->
+    <div class="dashboard-header">
+        <div class="header-left">
+            <h1 class="dashboard-title">Panel de Control</h1>
+            <p class="dashboard-subtitle">Resumen general del sistema</p>
+        </div>
+        <div class="header-right">
+            <div class="date-time">
+                <span id="currentDate" class="current-date"></span>
+                <span id="currentTime" class="current-time"></span>
+            </div>
+            <div class="quick-actions">
+                <button class="btn btn-primary btn-sm" id="newSaleBtn">
+                    <i class="icon">🛒</i>
+                    Nueva Venta
+                </button>
+                <button class="btn btn-secondary btn-sm" id="quickSearchBtn">
+                    <i class="icon">🔍</i>
+                    Búsqueda Rápida
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TARJETAS DE ESTADÍSTICAS ===== -->
+    <div class="stats-grid">
+        <div class="stat-card sales-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-content">
+                <h3 class="stat-title">Ventas Hoy</h3>
+                <div class="stat-value" id="todaySales">S/ 0.00</div>
+                <div class="stat-change positive" id="salesChange">
+                    <span class="change-icon">↗</span>
+                    <span class="change-text">+12.5%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card orders-card">
+            <div class="stat-icon">📦</div>
+            <div class="stat-content">
+                <h3 class="stat-title">Órdenes</h3>
+                <div class="stat-value" id="todayOrders">0</div>
+                <div class="stat-change positive" id="ordersChange">
+                    <span class="change-icon">↗</span>
+                    <span class="change-text">+8.2%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card products-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-content">
+                <h3 class="stat-title">Productos</h3>
+                <div class="stat-value" id="totalProducts">0</div>
+                <div class="stat-change neutral" id="productsChange">
+                    <span class="change-icon">→</span>
+                    <span class="change-text">Sin cambios</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card customers-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-content">
+                <h3 class="stat-title">Clientes</h3>
+                <div class="stat-value" id="totalCustomers">0</div>
+                <div class="stat-change positive" id="customersChange">
+                    <span class="change-icon">↗</span>
+                    <span class="change-text">+5.1%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
+    <div class="dashboard-content">
+        <!-- ===== GRÁFICOS Y ANÁLISIS ===== -->
+        <div class="content-left">
+            <!-- Gráfico de Ventas -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">Ventas de los Últimos 7 Días</h3>
+                    <div class="card-actions">
+                        <select id="salesPeriod" class="form-select">
+                            <option value="7">Últimos 7 días</option>
+                            <option value="30">Últimos 30 días</option>
+                            <option value="90">Últimos 3 meses</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="chart-container">
+                        <canvas id="salesChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productos Más Vendidos -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">Productos Más Vendidos</h3>
+                    <a href="#/inventory" class="card-link">Ver todos</a>
+                </div>
+                <div class="card-content">
+                    <div class="top-products-list" id="topProductsList">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PANEL LATERAL ===== -->
+        <div class="content-right">
+            <!-- Actividad Reciente -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">Actividad Reciente</h3>
+                    <button class="btn btn-sm btn-ghost" id="refreshActivityBtn">
+                        <i class="icon">🔄</i>
+                    </button>
+                </div>
+                <div class="card-content">
+                    <div class="activity-list" id="activityList">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alertas del Sistema -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">Alertas del Sistema</h3>
+                    <span class="alert-count" id="alertCount">0</span>
+                </div>
+                <div class="card-content">
+                    <div class="alerts-list" id="alertsList">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accesos Rápidos -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">Accesos Rápidos</h3>
+                </div>
+                <div class="card-content">
+                    <div class="quick-links">
+                        <a href="#/sales" class="quick-link">
+                            <div class="quick-link-icon">🛒</div>
+                            <div class="quick-link-text">Nueva Venta</div>
+                        </a>
+                        <a href="#/inventory" class="quick-link">
+                            <div class="quick-link-icon">📦</div>
+                            <div class="quick-link-text">Inventario</div>
+                        </a>
+                        <a href="#/customers" class="quick-link">
+                            <div class="quick-link-icon">👥</div>
+                            <div class="quick-link-text">Clientes</div>
+                        </a>
+                        <a href="#/reports" class="quick-link">
+                            <div class="quick-link-icon">📊</div>
+                            <div class="quick-link-text">Reportes</div>
+                        </a>
+                        <a href="#/cash" class="quick-link">
+                            <div class="quick-link-icon">💰</div>
+                            <div class="quick-link-text">Caja</div>
+                        </a>
+                        <a href="#/settings" class="quick-link">
+                            <div class="quick-link-icon">⚙️</div>
+                            <div class="quick-link-text">Configuración</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER DEL DASHBOARD ===== -->
+    <div class="dashboard-footer">
+        <div class="footer-left">
+            <span class="system-status">
+                <span class="status-indicator online"></span>
+                Sistema en línea
+            </span>
+            <span class="last-backup" id="lastBackup">
+                Último respaldo: Nunca
+            </span>
+        </div>
+        <div class="footer-right">
+            <span class="version-info">
+                Versión 1.0.0
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL DE BÚSQUEDA RÁPIDA ===== -->
+<div id="quickSearchModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Búsqueda Rápida</h3>
+            <button class="modal-close" id="closeQuickSearchBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="search-container">
+                <input type="text" id="quickSearchInput" class="form-input" 
+                       placeholder="Buscar productos, clientes, ventas...">
+                <div class="search-filters">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="searchProducts" checked>
+                        <span class="checkbox-checkmark"></span>
+                        Productos
+                    </label>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="searchCustomers" checked>
+                        <span class="checkbox-checkmark"></span>
+                        Clientes
+                    </label>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="searchSales">
+                        <span class="checkbox-checkmark"></span>
+                        Ventas
+                    </label>
+                </div>
+            </div>
+            <div class="search-results" id="searchResults">
+                <!-- Resultados de búsqueda -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== LOADER PARA DATOS ===== -->
+<div id="dashboardLoader" class="dashboard-loader hidden">
+    <div class="loader-content">
+        <div class="spinner"></div>
+        <p>Cargando datos del dashboard...</p>
+    </div>
+</div>

@@ -1,0 +1,123 @@
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <img src="public/assets/images/logo.png" alt="Minimarket" class="auth-logo">
+            <h1 class="auth-title">Sistema de Ventas</h1>
+            <p class="auth-subtitle">Minimarket</p>
+        </div>
+        
+        <form id="login-form" class="auth-form">
+            <div class="form-group">
+                <label for="username" class="form-label">Usuario</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    class="form-input" 
+                    placeholder="Ingresa tu usuario"
+                    required
+                    autocomplete="username"
+                >
+                <span class="form-error" id="username-error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="password" class="form-label">Contraseña</label>
+                <div class="password-input-container">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-input" 
+                        placeholder="Ingresa tu contraseña"
+                        required
+                        autocomplete="current-password"
+                    >
+                    <button type="button" class="password-toggle" id="password-toggle">
+                        <span class="password-toggle-icon">👁️</span>
+                    </button>
+                </div>
+                <span class="form-error" id="password-error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="remember-me" name="remember">
+                    <span class="checkbox-checkmark"></span>
+                    Recordar sesión
+                </label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-login" id="login-btn">
+                <span class="btn-text">Iniciar Sesión</span>
+                <span class="btn-spinner" style="display: none;">
+                    <div class="spinner"></div>
+                </span>
+            </button>
+            
+            <div class="auth-links">
+                <a href="#" id="forgot-password-link" class="auth-link">¿Olvidaste tu contraseña?</a>
+            </div>
+        </form>
+        
+        <div class="auth-footer">
+            <p class="auth-version">Versión 1.0.0</p>
+            <p class="auth-copyright">&copy; 2024 Sistema de Minimarket</p>
+        </div>
+    </div>
+    
+    <!-- Modal de recuperación de contraseña -->
+    <div id="forgot-password-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div class="modal-header">
+                <h3>Recuperar Contraseña</h3>
+            </div>
+            <form id="forgot-password-form">
+                <div class="form-group">
+                    <label for="recovery-email" class="form-label">Correo Electrónico</label>
+                    <input 
+                        type="email" 
+                        id="recovery-email" 
+                        name="email" 
+                        class="form-input" 
+                        placeholder="Ingresa tu correo electrónico"
+                        required
+                    >
+                    <span class="form-error" id="recovery-email-error"></span>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-recovery">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="send-recovery">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Demo de usuarios para testing -->
+<div class="demo-users" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 12px;">
+    <h4 style="margin: 0 0 10px 0; color: #666;">Usuarios de Prueba:</h4>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+        <div>
+            <strong>Administrador:</strong><br>
+            Usuario: admin<br>
+            Contraseña: admin123
+        </div>
+        <div>
+            <strong>Gerente:</strong><br>
+            Usuario: manager<br>
+            Contraseña: manager123
+        </div>
+        <div>
+            <strong>Cajero:</strong><br>
+            Usuario: cashier<br>
+            Contraseña: cashier123
+        </div>
+        <div>
+            <strong>Inventario:</strong><br>
+            Usuario: inventory<br>
+            Contraseña: inventory123
+        </div>
+    </div>
+</div>
