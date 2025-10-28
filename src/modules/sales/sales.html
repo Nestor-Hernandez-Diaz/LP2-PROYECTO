@@ -12,8 +12,81 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../../../public/assets/css/dashboard.css">
 </head>
 <body>
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>LP2 Minimarket</h2>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="../../../dashboard.html" class="nav-link " data-module="dashboard">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#sales" class="nav-link active" data-module="sales">
+                        <span class="nav-icon">💰</span>
+                        <span class="nav-text">Ventas</span>
+                    </a>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="clientes.html" class="nav-link" data-module="sales-management">
+                                <span class="sub-text">Clientes</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="consulta.html" class="nav-link" data-module="sales-reports">
+                                <span class="sub-text">Reportes de Ventas</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#inventory" class="nav-link" data-module="inventory">
+                        <span class="nav-icon">📦</span>
+                        <span class="nav-text">Inventario</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#purchases" class="nav-link" data-module="purchases">
+                        <span class="nav-icon">🛒</span>
+                        <span class="nav-text">Compras</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#quotes" class="nav-link" data-module="quotes">
+                        <span class="nav-icon">📋</span>
+                        <span class="nav-text">Cotizaciones</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#cash" class="nav-link" data-module="cash">
+                        <span class="nav-icon">💵</span>
+                        <span class="nav-text">Caja</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#users" class="nav-link" data-module="users">
+                        <span class="nav-icon">👥</span>
+                        <span class="nav-text">Usuarios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#settings" class="nav-link" data-module="settings">
+                        <span class="nav-icon">⚙️</span>
+                        <span class="nav-text">Configuración</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
     <div class="sales-container">
         <!-- Header -->
         <div class="module-header">
